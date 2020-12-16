@@ -1,0 +1,30 @@
+{
+  "name": "back-end",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/secret-family-tt-185/Back-end.git"
+  },
+  "author": "Matthew Martin, Jonathan Gatz, Rob H.",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/secret-family-tt-185/Back-end/issues"
+  },
+  "homepage": "https://github.com/secret-family-tt-185/Back-end#readme",
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "helmet": "^4.2.0",
+    "knex": "^0.21.13",
+    "sqlite3": "^5.0.0"
+  },
+  "devDependencies": {
+    "jest": "^26.6.3",
+    "nodemon": "^2.0.6"
+  }
+}
