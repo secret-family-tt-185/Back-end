@@ -6,11 +6,11 @@ module.exports = {
     client: 'sqlite3',
     useNullAsDefault: true,
     connection: {
-      filename: './database/repice.db3'
+      filename: './data/recipe.db3'
     },
     pool: {
       afterCreate: (conn, done) => {
-        conn.run('PRAGMA foreign_keys = ON', done):
+        conn.run('PRAGMA foreign_keys = ON', done);
       },
     },
     migrations: {
