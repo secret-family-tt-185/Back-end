@@ -1,4 +1,5 @@
 // Update with your config settings.
+const dbConnection = process.env.CLEARDB_DATABASE_URL
 
 module.exports = {
 
@@ -26,8 +27,8 @@ module.exports = {
     client: 'postgresql',
     connection: {
       database: 'my_db',
-      user:     'username',
-      password: 'password'
+      user:     process.env.username,
+      password: process.env.password
     },
     pool: {
       min: 2,
@@ -39,11 +40,11 @@ module.exports = {
   },
 
   production: {
-    client: 'postgresql',
+    client: 'mysql',
     connection: {
-      database: 'my_db',
-      user:     'username',
-      password: 'password'
+      database: dbConnection,
+      user:     process.env.username,
+      password: process.env.password
     },
     pool: {
       min: 2,
