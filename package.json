@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon server.js",
+    "start": "node server.js",
     "server": "nodemon index.js",
     "test": "cross-env DV_ENV=testing jest --watch",
     "migrate": "knex migrate:latest"
@@ -13,7 +13,7 @@
     "type": "git",
     "url": "git+https://github.com/secret-family-tt-185/Back-end.git"
   },
-  "author": "Matthew Martin, Jonathan Gatz, Rob H.",
+  "author": "Matthew Martin, Jonathan Gatz",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/secret-family-tt-185/Back-end/issues"
