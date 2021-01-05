@@ -1,4 +1,4 @@
-const jwt = require('jsonwebtoken');
+const jwt = require('jwtoken');
 
 const secrets = require('../../config/secrets.js');
 
