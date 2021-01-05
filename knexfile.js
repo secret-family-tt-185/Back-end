@@ -22,37 +22,4 @@ module.exports = {
       directory: './data/seeds',
     },
   },
-
-  staging: {
-    client: 'postgresql',
-    connection: {
-      database: 'my_db',
-      user:     process.env.username,
-      password: process.env.password
-    },
-    pool: {
-      min: 2,
-      max: 10
-    },
-    migrations: {
-      tableName: 'knex_migrations'
-    }
-  },
-
-  production: {
-    client: 'mysql',
-    connection: {
-      database: dbConnection,
-      user:     process.env.username,
-      password: process.env.password
-    },
-    pool: {
-      min: 2,
-      max: 10
-    },
-    migrations: {
-      tableName: 'knex_migrations'
-    }
-  }
-
 };
