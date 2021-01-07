@@ -13,12 +13,12 @@ user.password = hash;
 
 db.add(user)
     .then(user => {
-    const token = generateToken(user); 
-
-    res.status(201).json({username: user.username, title: user.title, tagline: user.tagline, token});
+    //const token = generateToken(user); 
+    console.log(user)
+    res.status(201).json({message: `${user.username} was created`});
     })
     .catch(error => {
-    res.status(500).json({message: "Unable to create user."});
+    res.status(500).json({message: `Unable to create user. ${error}`});
     });
 });
 
@@ -50,7 +50,7 @@ router.get('/testusers', (req, res) => {
     db.findAll()
     .then(user => {
         res.status(200).json(user)
-    }
+    })
 })
     
 
