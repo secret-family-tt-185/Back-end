@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const bcrypt = require('bcrypt');
-const jwt = require('jwtoken');
+const jwt = require('jsonwebtoken');
 
 const db = require('../users/users-model.js');
 const secrets = require('../../config/secrets.js');
@@ -14,7 +14,6 @@ user.password = hash;
 db.add(user)
     .then(user => {
     //const token = generateToken(user); 
-    console.log(user)
     res.status(201).json({message: `${user.username} was created`});
     })
     .catch(error => {
@@ -27,11 +26,11 @@ let { username, password } = req.body;
 
 db.findBy({ username })
     .first()
-    .then(user => {
+    .then(user => {        
     if (user && bcrypt.compareSync(password, user.password)) {
-        const token = generateToken(user); 
 
-        res.status(200).json({message: `User has logged in`});
+        const token = generateToken(user); 
+        res.status(200).json({message: `${user.username} has logged in`, token});
     } else {
         res.status(401).json({ message: 'Invalid Credentials' });
     }
