@@ -1,5 +1,4 @@
 // Update with your config settings.
-const dbConnection = process.env.CLEARDB_DATABASE_URL
 
 module.exports = {
 

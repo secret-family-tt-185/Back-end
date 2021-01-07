@@ -46,6 +46,14 @@ db.findBy({ username })
     });
 });
 
+router.get('/testusers', (req, res) => {
+    db.findAll()
+    .then(user => {
+        res.status(200).json(user)
+    }
+})
+    
+
 function generateToken(user) {
 const payload = {
     subject: user.id, 
