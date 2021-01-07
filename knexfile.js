@@ -22,16 +22,21 @@ module.exports = {
     },
   },
   production: {
-    client: 'pg',
-    connection: process.env.DATABASE_URL,
-    //searchPath: ['knex', 'public'],
+    client: 'sqlite3',
+    useNullAsDefault: true,
+    connection: {
+      filename: './data/recipe.db3'
+    },
     pool: {
-      min: 2,
-      max: 10
+      afterCreate: (conn, done) => {
+        conn.run('PRAGMA foreign_keys = ON', done);
+      },
     },
     migrations: {
       directory: './data/migrations',
+      tableName: 'knex_migrations'
     },
-    seeds: { directory: './data/seeds' },
-  },
+    seeds: {
+      directory: './data/seeds',
+    },
 };
