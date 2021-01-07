@@ -31,12 +31,7 @@ db.findBy({ username })
     if (user && bcrypt.compareSync(password, user.password)) {
         const token = generateToken(user); 
 
-        res.status(200).json({
-        username: user.username,
-        title: user.title,
-        tagline: user.tagline,
-        token
-        });
+        res.status(200).json({message: `User has logged in`});
     } else {
         res.status(401).json({ message: 'Invalid Credentials' });
     }
@@ -50,6 +45,9 @@ router.get('/testusers', (req, res) => {
     db.findAll()
     .then(user => {
         res.status(200).json(user)
+    })
+    .catch(error => {
+        res.status(500).json({error})
     })
 })
     
