@@ -49,7 +49,10 @@ router.get('/testusers', (req, res) => {
         res.status(500).json({error})
     })
 })
-    
+router.get('/status', (req, res) => {
+    const currentTime = new Date().toLocaleString();
+    res.status(200).json({message: `Server is active`, status:200, currentTime })
+})    
 
 function generateToken(user) {
 const payload = {
