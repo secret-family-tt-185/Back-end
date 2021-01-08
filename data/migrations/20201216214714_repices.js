@@ -21,7 +21,6 @@ exports.up = function(knex) {
   		tbl.string('instructions', 500)
   		tbl.integer('category_id').unsigned().notNullable().references('id').inTable('category').onUpdate('CASCADE').onDelete('CASCADE')
   		tbl.integer('ingredient_id').unsigned().notNullable().references('id').inTable('ingredients').onDelete('CASCADE').onUpdate('CASCADE')
-  		tbl.integer('user_id').unsigned().notNullable().references('id').inTable('users').onUpdate('CASCADE').onDelete('CASCADE')
   	})
   	
 };

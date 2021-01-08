@@ -39,16 +39,6 @@ db.findBy({ username })
     res.status(500).json(error);
     });
 });
-
-router.get('/testusers', (req, res) => {
-    db.findAll()
-    .then(user => {
-        res.status(200).json(user)
-    })
-    .catch(error => {
-        res.status(500).json({error})
-    })
-})
 router.get('/status', (req, res) => {
     const currentTime = new Date().toLocaleString();
     res.status(200).json({message: `Server is active`, status:200, currentTime })
