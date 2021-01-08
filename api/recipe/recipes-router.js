@@ -4,12 +4,11 @@ const restricted = require('../auth/restricted-middleware.js');
 
 router.get('/', restricted, (req, res) => {
 console.log(req.user);
-const userId = req.user.id;
 
 Recipes
-    .getRecipes(userId)
+    .getAll()
     .then(recipes => {
-        res.status(200).json({recipes});
+        res.status(200).json(recipes);
     })
     .catch(err => {
     res.status(500).json({message: 'cant retrieve recipes.'})

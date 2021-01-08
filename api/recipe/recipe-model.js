@@ -1,6 +1,7 @@
 const db = require('../../data/dbConfig.js');
 
 module.exports = {
+  getAll,
   getRecipes,
   getRecipeById,
   addRecipe,
@@ -8,15 +9,19 @@ module.exports = {
   updateRecipe
 };
 
+function getAll() {
+  return db('recipe')
+}
+
 async function getRecipes(userId) {
-  let tags = await db('recipes')
-    .where({'recipes.user_id': userId})
-    .join('tags', 'tags.recipe_id', 'recipes.id')
+  let tags = await db('recipe')
+    .where({'recipe.user_id': userId})
+    .join('tags', 'tags.recipe_id', 'recipe.id')
     .select('tags.tag as tags', 'tags.recipe_id');
 
-  let recipes = await db('recipes')
-  .where({'recipes.user_id': userId})
-  .select('recipes.*')
+  let recipes = await db('recipe')
+  .where({'recipe.user_id': userId})
+  .select('recipe.*')
 
 
   await recipes.forEach(recipe => {
@@ -39,13 +44,13 @@ async function getRecipes(userId) {
 };
 
 async function getRecipeById(recipeId, userId) {
-  const recipe = await db('recipes')
-  .where({'recipes.id': recipeId, 'recipes.user_id': userId})
+  const recipe = await db('recipe')
+  .where({'recipe.id': recipeId, 'recipe.user_id': userId})
   .first();
 
   if(recipe) {
     const ingredients = await db('ingredients')
-    .join('recipes', 'recipes.id', 'ingredients.recipe_id')
+    .join('recipes', 'recipe.id', 'ingredients.recipe_id')
     .select('ingredients.name')
     .where({'ingredients.recipe_id': recipeId })
     .map(ingredient => {
@@ -53,7 +58,7 @@ async function getRecipeById(recipeId, userId) {
     });
 
     const instructions = await db('instructions')
-      .join('recipes', 'recipes.id', 'instructions.recipe_id')
+      .join('recipe', 'recipe.id', 'instructions.recipe_id')
       .select('instructions.name')
       .where({'instructions.recipe_id': recipeId })
       .map(instruction => {
@@ -61,7 +66,7 @@ async function getRecipeById(recipeId, userId) {
       });
 
     const tags = await db('tags')
-      .join('recipes', 'recipes.id', 'tags.recipe_id')
+      .join('recipe', 'recipe.id', 'tags.recipe_id')
       .select('tags.tag')
       .where({'tags.recipe_id': recipeId})
       .map(tag => {
@@ -83,7 +88,7 @@ async function addRecipe(recipe, userId) {
 
   const recipeInsert = { user_id: userId, title: recipe.title, source: recipe.source, notes: recipe.notes }
   
-  const newRecipe = await db('recipes').insert(recipeInsert);
+  const newRecipe = await db('recipe').insert(recipeInsert);
   console.log(newRecipe);
 
   ingredients.forEach(async ingredient => {
@@ -106,34 +111,34 @@ async function addRecipe(recipe, userId) {
 
 async function deleteRecipe(recipeId, userId) {
   await db('tags')
-    .join('recipes', 'recipes.id', 'tags.recipe_id')
+    .join('recipe', 'recipe.id', 'tags.recipe_id')
     .where({'tags.recipe_id': recipeId})
     .del();
 
   await db('instructions')
-    .join('recipes', 'recipes.id', 'instructions.recipe_id')
+    .join('recipe', 'recipe.id', 'instructions.recipe_id')
     .where({'instructions.recipe_id': recipeId})
     .del();
 
   await db('ingredients')
-    .join('recipes', 'recipes.id', 'ingredients.recipe_id')
+    .join('recipe', 'recipe.id', 'ingredients.recipe_id')
     .where({'ingredients.recipe_id': recipeId})
     .del();
   
-  await db('recipes')
-    .where({'recipes.id': recipeId})
+  await db('recipe')
+    .where({'recipe.id': recipeId})
     .del();
 
   return getRecipes(userId);
 }
 
 async function updateRecipe(recipeId, userId, changes) {
-  const recipe = await db('recipes')
-    .where({'recipes.id': recipeId, 'recipes.user_id': userId})
+  const recipe = await db('recipe')
+    .where({'recipe.id': recipeId, 'recipe.user_id': userId})
     .first();
   
   const originalIngredients = await db('ingredients')
-    .join('recipes', 'recipes.id', 'ingredients.recipe_id')
+    .join('recipe', 'recipes.id', 'ingredients.recipe_id')
     .select('ingredients.*')
     .where({'ingredients.recipe_id': recipeId })
     .map(ingredient => {
@@ -141,7 +146,7 @@ async function updateRecipe(recipeId, userId, changes) {
     });
 
   const originalInstructions = await db('instructions')
-    .join('recipes', 'recipes.id', 'instructions.recipe_id')
+    .join('recipe', 'recipe.id', 'instructions.recipe_id')
     .select('instructions.*')
     .where({'instructions.recipe_id': recipeId })
     .map(instructions => {
@@ -149,7 +154,7 @@ async function updateRecipe(recipeId, userId, changes) {
   });
 
   const originalTags = await db('tags')
-    .join('recipes', 'recipes.id', 'tags.recipe_id')
+    .join('recipe', 'recipe.id', 'tags.recipe_id')
     .select('tags.*')
     .where({'tags.recipe_id': recipeId })
     .map(tag => {
@@ -159,15 +164,15 @@ async function updateRecipe(recipeId, userId, changes) {
   const recipeUpdate = { ...recipe, title: changes.title, source: changes.source, notes: changes.notes }
   
   if(recipe) {
-    await db('recipes')
-      .where({'recipes.id': recipeId})
+    await db('recipe')
+      .where({'recipe.id': recipeId})
       .first()
       .update(recipeUpdate);
 
     if(originalIngredients !== changes.ingredients) {
       console.log('ARRAYS NOT THE SAME');
       await db('ingredients')
-      .join('recipes', 'recipes.id', 'ingredients.recipe_id')
+      .join('recipe', 'recipe.id', 'ingredients.recipe_id')
       .select('ingredients.*')
       .where({'ingredients.recipe_id': recipeId })
       .del();
@@ -181,7 +186,7 @@ async function updateRecipe(recipeId, userId, changes) {
     if(originalInstructions !== changes.instructions) {
       console.log('ARRAYS NOT THE SAME');
       await db('instructions')
-      .join('recipes', 'recipes.id', 'instructions.recipe_id')
+      .join('recipe', 'recipe.id', 'instructions.recipe_id')
       .select('instructions.*')
       .where({'instructions.recipe_id': recipeId })
       .del();
@@ -195,7 +200,7 @@ async function updateRecipe(recipeId, userId, changes) {
     if(originalTags !== changes.tags) {
       console.log('ARRAYS NOT THE SAME');
       await db('tags')
-        .join('recipes', 'recipes.id', 'tags.recipe_id')
+        .join('recipe', 'recipe.id', 'tags.recipe_id')
         .select('tags.*')
         .where({'tags.recipe_id': recipeId })
         .del();
